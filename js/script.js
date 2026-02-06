@@ -142,6 +142,55 @@ document.querySelectorAll('.feature-item, .gameplay-item').forEach(item => {
     });
 });
 
+// 背景音乐控制
+function initBackgroundMusic() {
+    const music = document.getElementById('backgroundMusic');
+    if (music) {
+        // 创建音乐控制按钮
+        const musicControl = document.createElement('button');
+        musicControl.id = 'musicControl';
+        musicControl.style.position = 'fixed';
+        musicControl.style.bottom = '20px';
+        musicControl.style.right = '20px';
+        musicControl.style.width = '50px';
+        musicControl.style.height = '50px';
+        musicControl.style.borderRadius = '50%';
+        musicControl.style.backgroundColor = '#667eea';
+        musicControl.style.color = 'white';
+        musicControl.style.border = 'none';
+        musicControl.style.fontSize = '1.5rem';
+        musicControl.style.cursor = 'pointer';
+        musicControl.style.zIndex = '1001';
+        musicControl.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+        musicControl.innerHTML = '🎵';
+        musicControl.title = '控制音乐';
+        
+        // 切换音乐播放/暂停
+        musicControl.addEventListener('click', function() {
+            if (music.paused) {
+                music.play().catch(err => {
+                    console.log('音乐播放失败:', err);
+                });
+                musicControl.innerHTML = '🔊';
+            } else {
+                music.pause();
+                musicControl.innerHTML = '🔇';
+            }
+        });
+        
+        document.body.appendChild(musicControl);
+        
+        // 尝试在用户交互时播放音乐
+        document.addEventListener('click', function() {
+            if (music.paused) {
+                music.play().catch(err => {
+                    console.log('音乐播放失败:', err);
+                });
+            }
+        }, { once: true });
+    }
+}
+
 // 添加页面加载动画
 const loaderHTML = `
     <div class="loader" style="
@@ -175,3 +224,6 @@ const loaderHTML = `
 `;
 
 document.body.insertAdjacentHTML('afterbegin', loaderHTML);
+
+// 初始化背景音乐
+window.addEventListener('load', initBackgroundMusic);
